@@ -50,7 +50,6 @@ public class Main {
 
             int status = conn2.getResponseCode();
             System.out.println(status);
-            String contentType = conn2.getHeaderField("content-type");
             //===================================
 
             if (status <= 399 && status >= 100){
