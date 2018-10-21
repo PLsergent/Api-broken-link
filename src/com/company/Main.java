@@ -1,8 +1,6 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
@@ -20,15 +18,28 @@ public class Main {
             conn.connect();
             // =============Lecture==============
 
-            InputStream bodyStream = conn.getInputStream();
-            BufferedReader bodyReader = new BufferedReader(new InputStreamReader(bodyStream));
-            String line = bodyReader.readLine();
+            InputStream bodyStream = conn.getInputStream();//récupération du stream
+            InputStreamReader readerStream = new InputStreamReader(bodyStream);//traduction en format lisible
+            BufferedReader bodyReader = new BufferedReader(readerStream);//lecture du stream
+            String line = bodyReader.readLine();//lecture de chaque ligne
             while(line != null){
                 linkReader(line);
                 line = bodyReader.readLine();
             }
             System.out.println(linkBroken);
             System.out.println(linkOk);
+
+            URL url = new URL("https://liris-ktbs01.insa-lyon.fr:8000/blogephem/");
+            HttpURLConnection conn2 = (HttpURLConnection) url.openConnection();
+            conn2.setRequestMethod("POST");
+            conn2.addRequestProperty("content-type", "application/x-www-form-urlencoded");
+            conn2.setDoOutput(true);
+            OutputStream stream = conn2.getOutputStream();
+            OutputStreamWriter writer = new OutputStreamWriter(stream);
+            writer.write("title=hello&body=world");
+            writer.close();
+            conn2.connect();
+
         }catch (Exception e){
         }
     }
